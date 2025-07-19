@@ -1,0 +1,423 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Plant App UI',
+      theme: ThemeData(
+        primarySwatch: Colors.green, // Base color for the app
+        scaffoldBackgroundColor: const Color(0xFFF0F5EE), // Light green-grey background from image
+        fontFamily: 'Roboto', // Example font, you might need to import a custom font
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent, // Make app bar transparent
+          elevation: 0,
+          foregroundColor: Colors.black,
+        ),
+      ),
+      home: const PlantHomeScreen(),
+    );
+  }
+}
+
+class PlantHomeScreen extends StatefulWidget {
+  const PlantHomeScreen({super.key});
+
+  @override
+  State<PlantHomeScreen> createState() => _PlantHomeScreenState();
+}
+
+class _PlantHomeScreenState extends State<PlantHomeScreen> {
+  // Dummy data for Recently Viewed plants
+  final List<Map<String, dynamic>> _recentlyViewedPlants = [
+    {
+      'name': 'Orchid Cactus',
+      'type': 'Indoor Plant',
+      'image': 'https://www.shutterstock.com/image-photo/red-flowers-orchid-cactus-600w-1320098948.jpg', // Light green
+    },
+    {
+      'name': 'Haworthia',
+      'type': 'Indoor Plant',
+      'image': 'https://images.immediate.co.uk/production/volatile/sites/10/2023/08/2048x1365-Haworthia-SEO-GettyImages-1407338403-d88b930.jpg', // Medium green
+    },
+    {
+      'name': 'Aloe Vera',
+      'type': 'Indoor Plant',
+      'image': 'https://m.media-amazon.com/images/I/81XWpVvk5AL._UF1000,1000_QL80_.jpg', // Darker green
+    },
+  ];
+
+  // Dummy data for Popular Plants
+  final List<Map<String, dynamic>> _popularPlants = [
+    {
+      'name': 'Peace Lily',
+      'price': 20,
+      'image': 'https://m.media-amazon.com/images/I/51VU7-hQWiL._UF1000,1000_QL80_.jpg',
+    },
+    {
+      'name': 'Zanziber Gem',
+      'price': 25,
+      'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROizWTHZyazB44Cl_rekHNXhyVTeNIe9DP5Q&s',
+    },
+    {
+      'name': 'Pothos Vine',
+      'price': 30,
+      'image': 'https://images.squarespace-cdn.com/content/v1/54fbb611e4b0d7c1e151d22a/1610489398028-Q5JAILEOCGTE26U0MV36/golden-pothos-plant.jpg',
+    },
+  ];
+
+  // State for selected category filter
+  String _selectedCategory = 'Popular';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Top Header Section
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Menu Icon
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.menu, color: Colors.black87),
+                      onPressed: () {
+                        // Handle menu tap
+                      },
+                    ),
+                  ),
+                  // Greeting Text
+                  const Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hello Mia',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Take care of your plants !',
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Profile/Cart Icon
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.shopping_bag_outlined, color: Colors.black87),
+                      onPressed: () {
+                        // Handle cart/profile tap
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Search Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                    icon: Icon(Icons.search, color: Colors.grey[600]),
+                    suffixIcon: Icon(Icons.mic, color: Colors.grey[600]),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
+
+            // Recently Viewed Section
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Text(
+                'Recently Viewed',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 15),
+            SizedBox(
+              height: 100, // Height for horizontal ListView
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                itemCount: _recentlyViewedPlants.length,
+                itemBuilder: (context, index) {
+                  final plant = _recentlyViewedPlants[index];
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            plant['image'],
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, size: 60),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              plant['name'],
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              plant['type'],
+                              style: const TextStyle(color: Colors.grey, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 25),
+
+            // Category/Filter Tabs
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: ['Popular', 'Outdoor', 'Indoor', 'Top Pick']
+                      .map<Widget>((category) => Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedCategory = category;
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    category,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: _selectedCategory == category
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      color: _selectedCategory == category
+                                          ? Colors.black
+                                          : Colors.grey[600],
+                                    ),
+                                  ),
+                                  if (_selectedCategory == category)
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 5),
+                                      height: 3,
+                                      width: 25, // Small underline
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Popular Plants Section
+            SizedBox(
+              height: 230, // Height for horizontal ListView
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                itemCount: _popularPlants.length,
+                itemBuilder: (context, index) {
+                  final plant = _popularPlants[index];
+                  return Container(
+                    width: 150, // Fixed width for each plant card
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.vertical(top: const Radius.circular(15)),
+                          child: Image.network(
+                            plant['image'],
+                            height: 140, // Image height
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              height: 140,
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                plant['name'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                '\$${plant['price']}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 25),
+
+            // Free Shipping Banner
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6B8E7B), // Darker green background
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: [
+                    // Scooter Image
+                    Image.network(
+                      'https://www.gstatic.com/flutter-onestack-prototype/genui/example_1.jpg', // Using allowed placeholder image
+                      width: 100,
+                      height: 80,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.delivery_dining, size: 80, color: Colors.white),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Free Shipping',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Handle button tap
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF4C6A5A), // Even darker green for button
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            ),
+                            child: const Text(
+                              'Above \$50',
+                              style: TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 30), // Padding at the bottom
+          ],
+        ),
+      ),
+    );
+  }
+}
