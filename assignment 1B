@@ -1,0 +1,311 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Plant Detail',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const PlantDetailPage(),
+    );
+  }
+}
+
+class PlantInfoCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  const PlantInfoCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: Colors.green, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PlantDetailPage extends StatelessWidget {
+  const PlantDetailPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFE9F5EB), // Light green background
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              padding: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header Row: Back button and Favorite icon
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            // Handle back button press
+                          },
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.favorite, color: Colors.green),
+                          onPressed: () {
+                            // Handle favorite button press
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Plant Name
+                  const Text(
+                    'Peace Lily',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Plant Image and details
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Type',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Small',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Category',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Indoor Plant',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Price',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            '\$40.00',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Image.network(
+                            'https://seed2plant.in/cdn/shop/files/SPR-variegated-peace-lily-domino-7097188-hero-A-422d7faa152d42d3a4030ff8a2a33768.jpg?v=1692362762&width=1500', // Placeholder URL
+                            height: 200,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  // Light, Water, Temp details
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      PlantInfoCard(
+                        icon: Icons.lightbulb_outline,
+                        label: 'Light',
+                        value: '37%',
+                        color: const Color(0xFFFDE7EB), // Light Red/Pink
+                      ),
+                      PlantInfoCard(
+                        icon: Icons.opacity,
+                        label: 'Water',
+                        value: '2L',
+                        color: const Color(0xFFE2F3F8), // Light Blue
+                      ),
+                      PlantInfoCard(
+                        icon: Icons.thermostat_outlined,
+                        label: 'Temp',
+                        value: '25℃',
+                        color: const Color(0xFFE7F8E8), // Light Green
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  // About Peace Lily section
+                  const Text(
+                    'About Peace Lily',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Stack(
+                    children: [
+                      const Text(
+                        // Removed "Read More" from here to avoid redundancy with the Positioned widget
+                        'The peace lily plant is well known for its air-purifying abilities as a houseplant; it\'s great at breaking down and neutralizing toxic gases like carbon...',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                          height: 1.5,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            // Handle "Read More" action, e.g., expand text or navigate
+                            print('Read More tapped!');
+                          },
+                          child: const Text(
+                            'Read More',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  // Add to Cart button
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Add to Cart',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
